@@ -1,0 +1,175 @@
+/* === Wrapper === */
+.message-wrapper {
+  height: 100vh;
+  width: 100%;
+  background-color: #f8f9fa;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* === Profile Section Centered === */
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  width: 90%;
+  max-width: 600px;
+}
+
+/* Avatar Circle */
+.avatar-large {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #4361ee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.avatar-large:hover {
+  transform: scale(1.05);
+}
+
+/* Avatar Image Styling */
+.avatar-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* View Profile Button */
+.view-profile {
+  background-color: #4361ee;
+  color: #fff;
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.3);
+  letter-spacing: 0.02em;
+}
+
+.view-profile:hover {
+  background-color: #3a56d4;
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.4);
+  transform: translateY(-2px);
+}
+
+/* === Message Bubble Wrapper === */
+.bubble-wrapper {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+  max-width: 800px;
+  padding: 0 1rem;
+}
+
+/* Sent/Received Row */
+.flex {
+  display: flex;
+  width: 100%;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+/* Chat Bubble */
+.bubble-wrapper .p-2 {
+  padding: 0.8rem 1.2rem;
+  font-size: 0.95rem;
+  border-radius: 1.2rem;
+  max-width: 65%;
+  word-wrap: break-word;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  line-height: 1.4;
+}
+
+/* Sent (Right Side) */
+.bg-blue-500 {
+  background: linear-gradient(135deg, #4361ee, #3f37c9);
+  color: white;
+  border-bottom-right-radius: 0.3rem;
+}
+
+/* Received (Left Side) */
+.bg-gray-200 {
+  background-color: #f0f2f5;
+  color: #333;
+  border-bottom-left-radius: 0.3rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Message Timestamps - Add this for enhanced UI */
+.message-time {
+  font-size: 0.7rem;
+  margin-top: 0.3rem;
+  opacity: 0.7;
+  display: block;
+}
+
+/* Add animation for new messages */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.bubble-wrapper .p-2 {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* === Responsive Media Queries === */
+@media (max-width: 768px) {
+  .avatar-large {
+    width: 90px;
+    height: 90px;
+  }
+
+  .view-profile {
+    font-size: 0.85rem;
+    padding: 0.5rem 1.2rem;
+  }
+
+  .bubble-wrapper .p-2 {
+    font-size: 0.9rem;
+    max-width: 80%;
+  }
+  
+  .profile {
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .bubble-wrapper .p-2 {
+    max-width: 90%;
+    padding: 0.7rem 1rem;
+  }
+  
+  .avatar-large {
+    width: 80px;
+    height: 80px;
+  }
+}

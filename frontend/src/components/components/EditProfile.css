@@ -1,0 +1,346 @@
+:root {
+  --primary-color: #0095f6;
+  --primary-hover: #007ed9;
+  --bg-gray: #f8f8f9;
+  --text: #333;
+  --subtext: #555;
+  --border: #ddd;
+  --red: #ef4444;
+  --red-hover: #dc2626;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s ease;
+}
+
+/* Container */
+.edit-profile-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  font-family: 'Segoe UI', sans-serif;
+  transition: var(--transition);
+}
+
+.edit-profile-container:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Header */
+.edit-profile-container h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.75rem;
+  color: var(--text);
+  position: relative;
+}
+
+.edit-profile-container h1::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: var(--red);
+  border-radius: 2px;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-gray);
+  padding: 1.5rem;
+  border-radius: 16px;
+  margin-bottom: 2.5rem;
+  gap: 2rem;
+  transition: var(--transition);
+}
+
+.user-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* User info */
+.user-info {
+  flex-grow: 1;
+}
+
+.user-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.user-handle {
+  color: var(--subtext);
+  font-size: 0.95rem;
+}
+
+/* Avatar styling */
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+  position: relative;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.user-avatar img:hover {
+  filter: brightness(1.05);
+}
+
+/* Change Photo Button */
+.change-photo-btn {
+  background-color: var(--red);
+  color: white;
+  font-weight: 500;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.change-photo-btn:hover {
+  background-color: var(--red-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3);
+}
+
+.change-photo-btn:active {
+  transform: translateY(1px);
+}
+
+/* Bio Section */
+.bio-section {
+  margin-bottom: 2rem;
+}
+
+.bio-section h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.bio-section textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 1rem;
+  resize: none;
+  transition: var(--transition);
+  min-height: 120px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.bio-section textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 149, 246, 0.15);
+}
+
+.character-count {
+  font-size: 0.9rem;
+  color: var(--subtext);
+  text-align: right;
+  margin-top: 0.5rem;
+}
+
+/* Gender section */
+.gender-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: var(--bg-gray);
+  border-radius: 16px;
+  transition: var(--transition);
+}
+
+.gender-section:hover {
+  background-color: #f5f5f7;
+}
+
+.gender-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.gender-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+}
+
+.gender-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  transition: var(--transition);
+}
+
+.gender-label:hover {
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.gender-label input[type="radio"] {
+  accent-color: var(--red);
+  width: 20px;
+  height: 20px;
+  transition: var(--transition);
+}
+
+/* Save button */
+.save-button {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  padding: 0.85rem 2rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 2rem;
+  width: 100%;
+  font-size: 1.05rem;
+  box-shadow: 0 4px 12px rgba(0, 149, 246, 0.25);
+}
+
+.save-button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 149, 246, 0.3);
+}
+
+.save-button:active {
+  transform: translateY(1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .edit-profile-container {
+    padding: 1.5rem;
+    margin: 1rem;
+    border-radius: 16px;
+  }
+  
+  .edit-profile-container h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .user-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 1.25rem;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .change-photo-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .gender-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .gender-label {
+    width: 100%;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.edit-profile-container {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Interactive Input Styling */
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  color: var(--subtext);
+  transition: var(--transition);
+  pointer-events: none;
+  font-size: 1rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 149, 246, 0.15);
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+  transform: translateY(-1.75rem) translateX(-0.25rem) scale(0.85);
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.form-group input::placeholder {
+  color: transparent;
+}

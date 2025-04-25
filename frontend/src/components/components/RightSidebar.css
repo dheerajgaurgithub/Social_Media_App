@@ -1,0 +1,176 @@
+.right-sidebar-container {
+  padding: 16px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.user-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 8px;
+  text-decoration: none;
+  flex-wrap: nowrap;
+  transition: background-color 0.3s ease;
+}
+
+.user-link:hover {
+  background-color: #f3f4f6; /* Light background on hover */
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e5e7eb;
+  color: #374151;
+  font-weight: 600;
+  font-size: 14px;
+  height: 100%;
+  width: 100%;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.username {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bio {
+  font-size: 12px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+/* Tablet view */
+@media (max-width: 768px) {
+  .right-sidebar-container {
+    padding: 12px;
+  }
+
+  .user-link {
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .username {
+    font-size: 13.5px;
+  }
+
+  .bio {
+    font-size: 11.5px;
+    max-width: 140px;
+  }
+
+  .user-details {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .bio {
+    max-width: 120px;
+    white-space: nowrap;
+  }
+}
+
+/* Mobile view */
+@media (max-width: 480px) {
+  .right-sidebar-container {
+    padding: 8px;
+  }
+
+  .user-link {
+    gap: 8px;
+    padding: 6px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .username {
+    font-size: 13px;
+  }
+
+  .bio {
+    font-size: 11px;
+    max-width: 100px;
+  }
+
+  .user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .username {
+    font-size: 12px;
+  }
+
+  /* Adjust SuggestedUsers layout */
+  .suggested-users-container {
+    display: block;
+    margin-top: 12px;
+  }
+}
+
+/* Extra small screens (e.g., Portrait phones) */
+@media (max-width: 320px) {
+  .right-sidebar-container {
+    padding: 6px;
+  }
+
+  .avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .username {
+    font-size: 12px;
+  }
+
+  .bio {
+    font-size: 10px;
+    max-width: 80px;
+  }
+
+  .user-link {
+    gap: 6px;
+    padding: 4px;
+  }
+}
