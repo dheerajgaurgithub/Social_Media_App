@@ -106,9 +106,6 @@ const Signup = () => {
               onChange={(e) => setInput({ ...input, password: e.target.value })}
               placeholder="Password"
             />
-            <button type="button" onClick={togglePasswordVisibility}>
-              {showPassword ? <EyeOff /> : <Eye />}
-            </button>
           </div>
           {loading ? (
             <Button>

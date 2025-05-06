@@ -84,9 +84,6 @@ const Login = () => {
                             onChange={changeEventHandler}
                             placeholder="Password"
                         />
-                        <button type="button" onClick={togglePasswordVisibility}>
-                            {showPassword ? <EyeOff /> : <Eye />}
-                        </button>
                     </div>
                     {loading ? (
                         <Button>
