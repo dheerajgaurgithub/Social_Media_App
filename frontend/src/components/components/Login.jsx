@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import "./Signup.css";
 import { Loader2, Eye, EyeOff } from "lucide-react";
-
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setAuthUser } from "../../redux/authSlice";
 
@@ -17,6 +17,7 @@ const Login = () => {
     });
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const {user}=useSelector(store=>store.auth);
     const navigate = useNavigate();
     const dispatch=useDispatch();
 

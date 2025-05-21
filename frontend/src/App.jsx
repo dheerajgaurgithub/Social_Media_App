@@ -13,26 +13,43 @@ import ChatPage from "./components/components/ChatPage";
 import { setSocket } from "./redux/socketSlice";
 import { setOnlineUsers } from "./redux/chatSlice";
 import { setLikeNotification } from "./redux/rtm.Slice";
+import ProtectedRoutes from "./components/components/ProtectedRoutes";
 
 
 const browserRouter = createBrowserRouter([
   {
     path: "/",
-    element:  <MainLayout/> ,
+    element: <ProtectedRoutes><MainLayout /></ProtectedRoutes>,
     children: [
-      { path: "/", element: <Home />  },
-      { path: "/profile/:id", element: <Profile />  },
-      { path: "/account/edit", element: <EditProfile />},
-      { path: "/suggested", element:<SuggestedUsers />},
-      { path: "/chat", element: <ChatPage />}
+      {
+        path: '/',
+        element: <ProtectedRoutes><Home /></ProtectedRoutes>
+      },
+      {
+        path: '/profile/:id',
+        element: <ProtectedRoutes> <Profile /></ProtectedRoutes>
+      },
+      {
+        path: '/account/edit',
+        element: <ProtectedRoutes><EditProfile /></ProtectedRoutes>
+      },
+      {
+        path: '/chat',
+        element: <ProtectedRoutes><ChatPage /></ProtectedRoutes>
+      },
     ]
   },
-  { path: "/login", element: <Login /> },
-  { path: "/signup", element: <Signup /> }
-]);
+  {
+    path: '/login',
+    element: <Login />
+  },
+  {
+    path: '/signup',
+    element: <Signup />
+  },
+])
 
 function App() {
-
   const { user } = useSelector(store => store.auth);
   const { socket } = useSelector(store => store.socketio);
   const dispatch = useDispatch();
@@ -51,9 +68,11 @@ function App() {
       socketio.on('getOnlineUsers', (onlineUsers) => {
         dispatch(setOnlineUsers(onlineUsers));
       });
-      socketio.on('notification',(notification)=>{
+
+      socketio.on('notification', (notification) => {
         dispatch(setLikeNotification(notification));
-      })
+      });
+
       return () => {
         socketio.close();
         dispatch(setSocket(null));
@@ -64,7 +83,11 @@ function App() {
     }
   }, [user, dispatch]);
 
-  return <RouterProvider router={browserRouter} />;
+  return (
+    <>
+      <RouterProvider router={browserRouter} />
+    </>
+  )
 }
 
-export default App;
+export default App
