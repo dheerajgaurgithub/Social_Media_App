@@ -84,7 +84,9 @@ const LeftSidebar = () => {
 
   return (
     <div className={`left-sidebar ${!isAuthenticated ? "hidden" : ""}`}>
-      <img className="image" src="logo.png" alt="logo" />
+      <div className="logo">
+        <div className="logo1">Sσƈιαʅ Mҽԃια</div>
+      </div>
 
       <div className="sidebar-scroll-container">
         <div className="sidebar-menu">

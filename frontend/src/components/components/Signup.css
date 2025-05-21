@@ -13,6 +13,13 @@
   --transition: all 0.3s ease;
 }
 
+.logo{
+  height: 100px;
+  padding: 0 0 0 0;
+  text-align: center;
+  margin-top: 10px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -95,6 +102,7 @@ body {
   flex-direction: column;
   width: 100%;
   gap: 1rem;
+  text-align: center;
 }
 
 .signup-field {

@@ -63,9 +63,9 @@ const Login = () => {
         <div className="signup-container">
             <div className="signup-box">
                 <form onSubmit={loginHandler} className="signup-form">
-                    <img src="./public/logo.png" alt="Instagram" className="signup-logo" />
+                    <div className="logo">Sσƈιαʅ Mҽԃια</div>
                     <p className="signup-subtext">
-                        Login to see photos and videos from your friends.
+                        𝑳𝒐𝒈𝒊𝒏 𝒕𝒐 𝒔𝒆𝒆 𝒑𝒉𝒐𝒕𝒐𝒔 𝒇𝒓𝒐𝒎 𝒚𝒐𝒖𝒓 𝒇𝒓𝒊𝒆𝒏𝒅𝒔
                     </p>
                     <div className="signup-field">
                         <Input
@@ -73,7 +73,7 @@ const Login = () => {
                             name="email"
                             value={input.email}
                             onChange={changeEventHandler}
-                            placeholder="Email"
+                            placeholder="𝐄𝐦𝐚𝐢𝐥"
                         />
                     </div>
                     <div className="signup-password-field">
@@ -82,7 +82,7 @@ const Login = () => {
                             name="password"
                             value={input.password}
                             onChange={changeEventHandler}
-                            placeholder="Password"
+                            placeholder="𝐏𝐚𝐬𝐬𝐰𝐨𝐫𝐝"
                         />
                     </div>
                     {loading ? (
@@ -92,12 +92,12 @@ const Login = () => {
                         </Button>
                     ) : (
                         <Button type="submit" className="signup-button">
-                            Login
+                            𝐋𝐨𝐠𝐢𝐧
                         </Button>
                     )}
                 </form>
                 <div className="signup-login">
-                    Don't have an account? <Link to="/signup">Register</Link>
+                    Don't have an account? <Link to="/signup">𝐑𝐞𝐠𝐢𝐬𝐭𝐞𝐫</Link>
                 </div>
             </div>
         </div>

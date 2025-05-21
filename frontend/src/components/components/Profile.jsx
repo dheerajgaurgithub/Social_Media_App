@@ -125,6 +125,9 @@ const Profile = () => {
                 <p className="bio-love">Love: @{userProfile?.username}</p>
               )}
             </div>
+            <div className="full name">
+              <p className="bio=text"></p>
+            </div>
           </div>
         </div>
 

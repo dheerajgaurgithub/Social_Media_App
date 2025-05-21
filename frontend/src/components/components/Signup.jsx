@@ -76,9 +76,9 @@ const Signup = () => {
     <div className="signup-container">
       <div className="signup-box">
         <form onSubmit={signupHandler} className="signup-form">
-          <img src="./public/logo.png" alt="Instagram" className="signup-logo" />
+          <div className='logo'>Sσƈιαʅ Mҽԃια</div>
           <p className="signup-subtext">
-            Sign up to see photos and videos from your friends.
+            𝑹𝒆𝒈𝒊𝒔𝒕𝒆𝒓 𝒕𝒐 𝒔𝒆𝒆 𝒑𝒉𝒐𝒕𝒐𝒔 𝒇𝒓𝒐𝒎 𝒚𝒐𝒖𝒓 𝒇𝒓𝒊𝒆𝒏𝒅𝒔
           </p>
           <div className="signup-field">
             <Input
@@ -86,7 +86,7 @@ const Signup = () => {
               name="username"
               value={input.username}
               onChange={changeEventHandler}
-              placeholder="Username"
+              placeholder="𝐔𝐬𝐞𝐫𝐧𝐚𝐦𝐞"
             />
           </div>
           <div className="signup-field">
@@ -95,7 +95,7 @@ const Signup = () => {
               name="email"
               value={input.email}
               onChange={changeEventHandler}
-              placeholder="Email"
+              placeholder="𝐄𝐦𝐚𝐢𝐥"
             />
           </div>
           <div className="signup-password-field">
@@ -104,7 +104,7 @@ const Signup = () => {
               name="password"
               value={input.password}
               onChange={(e) => setInput({ ...input, password: e.target.value })}
-              placeholder="Password"
+              placeholder="𝐏𝐚𝐬𝐬𝐰𝐨𝐫𝐝"
             />
           </div>
           {loading ? (
@@ -113,11 +113,11 @@ const Signup = () => {
               Please wait
             </Button>
           ) : (
-            <Button type='submit' className="signup-button">Register</Button>
+            <Button type='submit' className="signup-button">𝐑𝐞𝐠𝐢𝐬𝐭𝐞𝐫</Button>
           )}
         </form>
         <div className="signup-login">
-          Already have an account? <Link to="/login">Log in</Link>
+          Already have an account? <Link to="/login">𝐋𝐨𝐠 𝐈𝐧</Link>
         </div>
       </div>
     </div>
