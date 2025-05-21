@@ -60,7 +60,7 @@ export const login = async (req, res) => {
             });
         }
 
-        const token = await jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+        const token = await jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
         const populatedPosts = await Promise.all(
             user.posts.map(async (postId) => {
