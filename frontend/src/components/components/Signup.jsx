@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Link, useNavigate } from 'react-router-dom';
 import "./Signup.css";
 import { Loader2 } from 'lucide-react';
+import Logo from "/src/assets/vite.svg";
 import { Eye, EyeOff } from "lucide-react";
 
 const Signup = () => {
@@ -76,9 +77,9 @@ const Signup = () => {
     <div className="signup-container">
       <div className="signup-box">
         <form onSubmit={signupHandler} className="signup-form">
-          <div className='logo'>Sσƈιαʅ Mҽԃια</div>
+          <img src={Logo} alt="Instagram" className="signup-logo" />
           <p className="signup-subtext">
-            𝑹𝒆𝒈𝒊𝒔𝒕𝒆𝒓 𝒕𝒐 𝒔𝒆𝒆 𝒑𝒉𝒐𝒕𝒐𝒔 𝒇𝒓𝒐𝒎 𝒚𝒐𝒖𝒓 𝒇𝒓𝒊𝒆𝒏𝒅𝒔
+            Sign up to see photos and videos from your friends.
           </p>
           <div className="signup-field">
             <Input
@@ -86,7 +87,7 @@ const Signup = () => {
               name="username"
               value={input.username}
               onChange={changeEventHandler}
-              placeholder="𝐔𝐬𝐞𝐫𝐧𝐚𝐦𝐞"
+              placeholder="Username"
             />
           </div>
           <div className="signup-field">
@@ -95,7 +96,7 @@ const Signup = () => {
               name="email"
               value={input.email}
               onChange={changeEventHandler}
-              placeholder="𝐄𝐦𝐚𝐢𝐥"
+              placeholder="Email"
             />
           </div>
           <div className="signup-password-field">
@@ -104,8 +105,11 @@ const Signup = () => {
               name="password"
               value={input.password}
               onChange={(e) => setInput({ ...input, password: e.target.value })}
-              placeholder="𝐏𝐚𝐬𝐬𝐰𝐨𝐫𝐝"
+              placeholder="Password"
             />
+            <button type="button" onClick={togglePasswordVisibility}>
+              {showPassword ? <EyeOff /> : <Eye />}
+            </button>
           </div>
           {loading ? (
             <Button>
@@ -113,11 +117,11 @@ const Signup = () => {
               Please wait
             </Button>
           ) : (
-            <Button type='submit' className="signup-button">𝐑𝐞𝐠𝐢𝐬𝐭𝐞𝐫</Button>
+            <Button type='submit' className="signup-button">Register</Button>
           )}
         </form>
         <div className="signup-login">
-          Already have an account? <Link to="/login">𝐋𝐨𝐠 𝐈𝐧</Link>
+          Already have an account? <Link to="/login">Log in</Link>
         </div>
       </div>
     </div>

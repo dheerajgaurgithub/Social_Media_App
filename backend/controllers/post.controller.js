@@ -3,7 +3,6 @@ import cloudinary from "../utils/cloudinary.js";
 import { Post } from "../models/post.model.js";
 import { User } from "../models/user.model.js";
 import { Comment } from "../models/comment.model.js";
-import { getReceiverSocketId, io } from "../socket/socket.js";
 export const addNewPost = async (req, res) => {
     try {
         const { caption } = req.body;
@@ -125,20 +124,6 @@ export const likePost = async (req, res) => {
         await post.updateOne({ $addToSet: { likes: personWhoLiked } });
         await post.save();
 
-        const user=await User.findById(personWhoLiked).select('username profilePicture');
-        const postOwnerId=post.author.toString();
-        if(postOwnerId!=personWhoLiked){
-            // emit notification event
-            const notification={
-                type:'like',
-                userId:personWhoLiked,
-                userDetails:user,
-                postId,
-                message:'Your Post was liked'
-            }
-            const postOwnerSocketId=getReceiverSocketId(postOwnerId);
-            io.to(postOwnerSocketId).emit('notification',notification);
-        }
         return res.status(200).json({
             message: "Post liked",
             success: true,
@@ -164,21 +149,6 @@ export const dislikePost = async (req, res) => {
 
         await post.updateOne({ $pull: { likes: personWhoLiked } });
         await post.save();
-
-        const user=await User.findById(personWhoLiked).select('username profilePicture');
-        const postOwnerId=post.author.toString();
-        if(postOwnerId!=personWhoLiked){
-            // emit notification event
-            const notification={
-                type:'dislike',
-                userId:personWhoLiked,
-                userDetails:user,
-                postId,
-                message:'Your Post was liked'
-            }
-            const postOwnerSocketId=getReceiverSocketId(postOwnerId);
-            io.to(postOwnerSocketId).emit('notification',notification);
-        }
 
         return res.status(200).json({
             message: "Post disliked",
@@ -316,30 +286,28 @@ export const deletePost = async (req, res) => {
     }
 }
 
-
-export const bookmarkPost = async (req, res) => {
+export const bookmarkPost = async (res, req) => {
     try {
-      const postId = req.params.id;
-      const userId = req.id; 
-  
-      const user = await User.findById(userId);
-      const post = await Post.findById(postId);
-  
-      if (!post) {
-        return res.status(404).json({ message: 'Post not found', success: false });
-      }
-  
-      if (user.bookmarks.includes(postId)) {
-        
-        await user.updateOne({ $pull: { bookmarks: postId } });
-        return res.status(200).json({ message: 'Post removed from bookmarks', success: true });
-      } else {
-        await user.updateOne({ $addToSet: { bookmarks: postId } });
-        return res.status(200).json({ message: 'Post added to bookmarks', success: true });
-      }
+        const postId = req.params.id;
+        const authorId = req.id;
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found', success: false });
+        }
+        const user = -await User.findById(authorId);
+        if (user.bookmarkPost.includes(post._id)) {
+            // already bookmarked -> remove from bookmark
+            await user.updateOne({ $pull: { bookmarks: post._id } });
+            await user.save();
+            return res.status(200).json({ type: 'unsaved', message: 'Removed from bookmark', success: true });
+        }
+        else {
+            // bookmark done
+            await user.updateOne({ $addToSet: { bookmarks: post._id } });
+            await user.save();
+            return res.status(200).json({ type: 'saved', message: 'Added bookmarked', success: true });
+        }
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Internal server error', success: false });
+        console.log("error");
     }
-  };
-  
+}

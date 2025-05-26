@@ -16,8 +16,6 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "../../redux/authSlice";
 import CreatePost from "./CreatePost.jsx";
-import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover.jsx";
-import { Button } from "./ui/button.jsx";
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
@@ -26,7 +24,6 @@ const LeftSidebar = () => {
   const [open, setOpen] = useState(false);
   const { user } = useSelector((store) => store.auth);
   const [isAuthenticated, setIsAuthenticated] = useState(!!user);
-  const { likeNotification } = useSelector((store) => store.realTimeNotification);
 
   useEffect(() => {
     setIsAuthenticated(!!user);
@@ -73,55 +70,42 @@ const LeftSidebar = () => {
 
   const sidebarItems = [
     { icon: <Home />, text: "Home" },
+    { icon: <Search />, text: "Search" },
+    { icon: <TrendingUp />, text: "Trending" },
     { icon: <MessageCircle />, text: "Messages" },
-    {
-      icon: <Heart />,
-      text: "Notification",
-      badge: likeNotification.length,
-    },
+    { icon: <Heart />, text: "Notification" },
     { icon: <PlusSquare />, text: "Create" },
-  ];
-
-  return (
-    <div className={`left-sidebar ${!isAuthenticated ? "hidden" : ""}`}>
-      <div className="logo">
-        <div className="logo1">Sσƈιαʅ Mҽԃια</div>
-      </div>
-
-      <div className="sidebar-scroll-container">
-        <div className="sidebar-menu">
-          {sidebarItems.map((item, index) => (
-            <div
-              onClick={() => sidebarHandler(item.text)}
-              key={index}
-              className="sidebar-item"
-            >
-              {item.icon}
-              <span>{item.text}</span>
-              {item.text === "Notification" && item.badge > 0 && (
-                <div className="notif-badge">{item.badge}</div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="sidebar-item profile-centered" onClick={() => sidebarHandler("Profile")}>
+    {
+      icon: (
         <Avatar>
           <AvatarImage
             src={user?.profilePicture || "/default-profile.png"}
             alt="Profile"
-            className="avatar-img large-avatar"
+            className="avatar-img"
           />
           <AvatarFallback>U</AvatarFallback>
         </Avatar>
-      </div>
+      ),
+      text: "Profile",
+    },
+    { icon: <LogOut />, text: "LogOut" },
+  ];
 
-      <div className="sidebar-item" onClick={() => sidebarHandler("LogOut")}>
-        <LogOut />
-        <span>LogOut</span>
+  return (
+    <div className={`left-sidebar ${!isAuthenticated ? "hidden" : ""}`}>
+      <h2 className="logo my-8 pl-3 font-bold text-xl">𝓜𝓪𝓱𝓲𝓻 𝓖𝓪𝓾𝓻</h2>
+      <div className="sidebar-menu">
+        {sidebarItems.map((item, index) => (
+          <div
+            onClick={() => sidebarHandler(item.text)}
+            key={index}
+            className="sidebar-item"
+          >
+            {item.icon}
+            <span>{item.text}</span>
+          </div>
+        ))}
       </div>
-
       <CreatePost open={open} setOpen={setOpen} />
     </div>
   );

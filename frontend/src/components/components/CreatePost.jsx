@@ -100,8 +100,8 @@ const CreatePost = ({ open, setOpen }) => {
         </DialogDescription>
 
         <form onSubmit={createPostHandler} className="create-post-form">
-          <div className="profile">
-            <Avatar className="img">
+          <div className="profile-card">
+            <Avatar>
               <AvatarImage src={user?.profilePicture} />
               <AvatarFallback>{user?.username?.charAt(0) || "U"}</AvatarFallback>
             </Avatar>

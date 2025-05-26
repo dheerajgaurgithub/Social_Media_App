@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Dialog, DialogTrigger, DialogContent } from "@radix-ui/react-dialog";
 import { Bookmark, MessageCircle, MoreHorizontal, Send } from "lucide-react";
@@ -18,21 +18,13 @@ const Post = ({ post, onDelete }) => {
   const { user } = useSelector((store) => store.auth);
   const { posts } = useSelector((store) => store.post);
   const dispatch = useDispatch();
-  const [bookmarked, setBookmarked] = useState(false);
+  if (!post || !post.author || !post._id) {
+    return null;
+  }
+
   const [liked, setLiked] = useState(post.likes?.includes(user?._id) || false);
   const [postLike, setPostLike] = useState(post.likes?.length || 0);
   const [comment, setComment] = useState(post.comments || []);
-  const [isFollowing, setIsFollowing] = useState(false);
-
-  if (!post || !post.author || !post._id) return null;
-
-  const author = post.author;
-
-  useEffect(() => {
-    if (author && user) {
-      setIsFollowing(author.followers?.includes(user._id));
-    }
-  }, [author, user]);
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -43,7 +35,9 @@ const Post = ({ post, onDelete }) => {
     try {
       const res = await axios.delete(
         `http://localhost:8000/api/v1/post/delete/${post._id}`,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+        }
       );
       if (res.data.success) {
         toast.success(res.data.message);
@@ -64,7 +58,9 @@ const Post = ({ post, onDelete }) => {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
         `http://localhost:8000/api/v1/post/${post._id}/${action}`,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+        }
       );
       if (res.data.success) {
         const updatedLikes = liked ? postLike - 1 : postLike + 1;
@@ -116,38 +112,7 @@ const Post = ({ post, onDelete }) => {
     }
   };
 
-  const bookmarkHandler = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8000/api/v1/post/${post?._id}/bookmark`,
-        { withCredentials: true }
-      );
-      if (res.data.success) {
-        setBookmarked(!bookmarked);
-        toast.success(res.data.message);
-      } else {
-        toast.error(res.data.message || "Something went wrong while bookmarking.");
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("An error occurred while bookmarking.");
-    }
-  };
-
-  const handleFollowUnfollow = async () => {
-    try {
-      const url = `http://localhost:8000/api/v1/user/followOrUnfollow/${author?._id}`;
-      const res = await axios.post(url, {}, { withCredentials: true });
-
-      if (res.data.success) {
-        setIsFollowing((prev) => !prev);
-        toast.success(isFollowing ? "Unfollowed successfully!" : "Followed successfully!");
-      }
-    } catch (error) {
-      console.error("Follow/Unfollow error:", error);
-      toast.error("Something went wrong!");
-    }
-  };
+  const author = post.author;
 
   return (
     <div className="post-container">
@@ -181,14 +146,8 @@ const Post = ({ post, onDelete }) => {
             <MoreHorizontal className="icon" />
           </DialogTrigger>
           <DialogContent className="dialog-content">
-            {post?.author?._id !== user?._id && (
-              <>
-                <button onClick={handleFollowUnfollow} className="dialog-button">
-                  {isFollowing ? "Unfollow" : "Follow"}
-                </button>
-                <button className="dialog-button">Add to favourites</button>
-              </>
-            )}
+            <button className="dialog-button">Unfollow</button>
+            <button className="dialog-button">Add to favourites</button>
             {user && user?._id === author?._id && (
               <Button onClick={deletePostHandler} className="dialog-button">
                 Delete
@@ -223,13 +182,7 @@ const Post = ({ post, onDelete }) => {
           />
           <Send className="icon" />
         </div>
-        <div className="bookmark-icon" onClick={bookmarkHandler}>
-          {bookmarked ? (
-            <Bookmark size={22} className="icon bookmarked" />
-          ) : (
-            <Bookmark size={22} className="icon" />
-          )}
-        </div>
+        <Bookmark size={22} className="icon" />
       </div>
 
       {/* Likes */}

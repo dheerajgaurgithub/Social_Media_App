@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import "./Signup.css";
 import { Loader2, Eye, EyeOff } from "lucide-react";
-import { useSelector } from "react-redux";
+import Logo from "/src/assets/vite.svg";
 import { useDispatch } from "react-redux";
 import { setAuthUser } from "../../redux/authSlice";
 
@@ -17,7 +17,6 @@ const Login = () => {
     });
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const {user}=useSelector(store=>store.auth);
     const navigate = useNavigate();
     const dispatch=useDispatch();
 
@@ -64,9 +63,9 @@ const Login = () => {
         <div className="signup-container">
             <div className="signup-box">
                 <form onSubmit={loginHandler} className="signup-form">
-                    <div className="logo">Sσƈιαʅ Mҽԃια</div>
+                    <img src={Logo} alt="Instagram" className="signup-logo" />
                     <p className="signup-subtext">
-                        𝑳𝒐𝒈𝒊𝒏 𝒕𝒐 𝒔𝒆𝒆 𝒑𝒉𝒐𝒕𝒐𝒔 𝒇𝒓𝒐𝒎 𝒚𝒐𝒖𝒓 𝒇𝒓𝒊𝒆𝒏𝒅𝒔
+                        Login to see photos and videos from your friends.
                     </p>
                     <div className="signup-field">
                         <Input
@@ -74,7 +73,7 @@ const Login = () => {
                             name="email"
                             value={input.email}
                             onChange={changeEventHandler}
-                            placeholder="𝐄𝐦𝐚𝐢𝐥"
+                            placeholder="Email"
                         />
                     </div>
                     <div className="signup-password-field">
@@ -83,8 +82,11 @@ const Login = () => {
                             name="password"
                             value={input.password}
                             onChange={changeEventHandler}
-                            placeholder="𝐏𝐚𝐬𝐬𝐰𝐨𝐫𝐝"
+                            placeholder="Password"
                         />
+                        <button type="button" onClick={togglePasswordVisibility}>
+                            {showPassword ? <EyeOff /> : <Eye />}
+                        </button>
                     </div>
                     {loading ? (
                         <Button>
@@ -93,12 +95,12 @@ const Login = () => {
                         </Button>
                     ) : (
                         <Button type="submit" className="signup-button">
-                            𝐋𝐨𝐠𝐢𝐧
+                            Login
                         </Button>
                     )}
                 </form>
                 <div className="signup-login">
-                    Don't have an account? <Link to="/signup">𝐑𝐞𝐠𝐢𝐬𝐭𝐞𝐫</Link>
+                    Don't have an account? <Link to="/signup">Register</Link>
                 </div>
             </div>
         </div>

@@ -1,13 +1,12 @@
 import { Conversation } from '../models/conversation.model.js';
-import { getReceiverSocketId, io } from "../socket/socket.js";
+// import { getReceiverSocketId, io } from "../socket/socket.js";
 import {Message} from "../models/message.model.js"
-
+// for chatting
 export const sendMessage =async(req,res) =>{
     try {
         const senderId = req.id;
         const receiverId = req.params.id;
         const {textMessage:message} = req.body;
-        // console.log(message);
         let conversation = await Conversation.findOne({
             participants:{$all:[senderId, receiverId]}
         });
@@ -40,18 +39,25 @@ export const sendMessage =async(req,res) =>{
         console.log(error);
     }
 }
-export const getMessage = async (req,res) => {
+export const getMessage=async(req,res)=>{
     try {
-        const senderId = req.id;
-        const receiverId = req.params.id;
-        const conversation = await Conversation.findOne({
-            participants:{$all: [senderId, receiverId]}
-        }).populate('messages');
-        if(!conversation) return res.status(200).json({success:true, messages:[]});
+        const senderId=req.id;
+        const receiverId=req.params.id;
+        const conversation=await Conversation.find({
+            participants:{$all:[senderId,receiverId]}
+        });
+        if(!conversation){
+            return res.status(200).json({
+                success:true,
+                messages:[]
+            })
+        };
+        res.status(200).json({
+            success:true,
+            messages:conversation.messages
+        });
 
-        return res.status(200).json({success:true, messages:conversation?.messages});
-        
     } catch (error) {
-        console.log(error);
+        console.log("error");
     }
 }

@@ -14,12 +14,11 @@ import axios from "axios";
 import { toast } from "sonner";
 
 const CommentDialog = ({ open, setOpen }) => {
-  const dispatch = useDispatch();
-  const { selectedPost, posts } = useSelector((store) => store.post);
-  const { user } = useSelector((store) => store.auth);
-
   const [text, setText] = useState("");
-  const [comments, setComments] = useState(selectedPost?.comments || []);
+  const dispatch = useDispatch();
+  const { selectedPost, posts } = useSelector(store => store.post);
+  const [comments, setComments] = useState(selectedPost?.comments); 
+  const { user } = useSelector(store => store.auth);
 
   useEffect(() => {
     if (selectedPost) {
@@ -47,8 +46,8 @@ const CommentDialog = ({ open, setOpen }) => {
 
       if (res.data.success) {
         const newComment = res.data.comment;
-        const updatedComments = [...comments, newComment];
-        setComments(updatedComments);
+        const updatedComments = [...comments, newComment]; 
+        setComments(updatedComments); 
 
         const updatedPosts = posts.map((post) =>
           post._id === selectedPost._id
@@ -65,8 +64,6 @@ const CommentDialog = ({ open, setOpen }) => {
       toast.error("Failed to add comment");
     }
   };
-
-  if (!selectedPost) return null;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -93,7 +90,7 @@ const CommentDialog = ({ open, setOpen }) => {
               </Avatar>
               <div>
                 <span className="username">{selectedPost?.author?.username}</span>
-                <hr />
+                <hr/>
                 <span className="user-bio">{selectedPost?.caption}</span>
               </div>
             </div>

@@ -60,10 +60,11 @@ export const login = async (req, res) => {
             });
         }
 
-        const token = await jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        const token = await jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });
 
         const populatedPosts = await Promise.all(
             user.posts.map(async (postId) => {
+                // Check if postId is valid and ensure Post.findById doesn't return null
                 const post = await Post.findById(postId);
                 if (post && post.author && post.author.equals(user._id)) {
                     return post;
@@ -72,6 +73,7 @@ export const login = async (req, res) => {
             })
         );
 
+        // Filter out any null posts (in case some posts weren't found or don't belong to the user)
         const validPosts = populatedPosts.filter(post => post !== null);
 
         user = {
@@ -183,42 +185,37 @@ export const getSuggestedUsers = async (req, res) => {
 };
 export const followOrUnfollow = async (req, res) => {
     try {
-        const followPerson = req.id;
+        const followPerson = req.id; // patel
         const followingPerson = req.params.id;
-
         if (followPerson === followingPerson) {
             return res.status(400).json({
                 message: 'You cannot follow/unfollow yourself',
                 success: false
             });
         }
-
         const user = await User.findById(followPerson);
         const targetUser = await User.findById(followingPerson);
-
         if (!user || !targetUser) {
-            return res.status(404).json({
+            return res.status(400).json({
                 message: 'User not found',
                 success: false
             });
         }
-
         const isFollowing = user.following.includes(followingPerson);
         if (isFollowing) {
             await Promise.all([
                 User.updateOne({ _id: followPerson }, { $pull: { following: followingPerson } }),
                 User.updateOne({ _id: followingPerson }, { $pull: { followers: followPerson } }),
-            ]);
+            ])
             return res.status(200).json({ message: 'Unfollowed successfully', success: true });
         } else {
             await Promise.all([
                 User.updateOne({ _id: followPerson }, { $push: { following: followingPerson } }),
                 User.updateOne({ _id: followingPerson }, { $push: { followers: followPerson } }),
-            ]);
-            return res.status(200).json({ message: 'Followed successfully', success: true });
+            ])
+            return res.status(200).json({ message: 'followed successfully', success: true });
         }
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Server error', success: false });
+        console.log(error);
     }
-};
+}

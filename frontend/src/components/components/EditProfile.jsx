@@ -1,42 +1,32 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import React, { useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { Loader2 } from "lucide-react";
-import { setAuthUser } from "../../redux/authSlice";
 import "./EditProfile.css";
+import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { setAuthUser } from "../../redux/authSlice";
+import axios from "axios";
+import { toast } from "sonner";
 
 const EditProfile = () => {
   const imgRef = useRef();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   const { user } = useSelector((store) => store.auth);
-
   const [input, setInput] = useState({
-    profilePhoto: null,
-    bio: "",
-    gender: "",
+    profilePhoto: user?.profilePicture,
+    bio: user?.bio || "",
+    gender: user?.gender || "",
   });
 
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setInput({
-      profilePhoto: null,
-      bio: user?.bio || "",
-      gender: user?.gender || "",
-    });
-  }, [user]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const fileChangeHandler = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      setInput((prev) => ({ ...prev, profilePhoto: file }));
+      setInput({ ...input, profilePhoto: file });
     }
   };
 
@@ -52,8 +42,7 @@ const EditProfile = () => {
     const formData = new FormData();
     formData.append("bio", input.bio);
     formData.append("gender", input.gender);
-
-    if (input.profilePhoto instanceof File) {
+    if (input.profilePhoto) {
       formData.append("profilephoto", input.profilePhoto);
     }
 
@@ -74,13 +63,12 @@ const EditProfile = () => {
         const updatedUserData = {
           ...user,
           bio: res.data.user?.bio,
-          gender: res.data.user?.gender,
           profilePicture: res.data.user?.profilePicture,
+          gender: res.data.user?.gender,
         };
-
         dispatch(setAuthUser(updatedUserData));
         toast.success(res.data.message);
-        navigate(`/profile/${res.data.user?._id}`);
+        navigate(`/profile/${user?._id}`);
       }
     } catch (error) {
       console.error(error);
@@ -99,14 +87,7 @@ const EditProfile = () => {
           <div className="user-details">
             <div className="user-avatar">
               <Avatar>
-                <AvatarImage
-                  src={
-                    input.profilePhoto instanceof File
-                      ? URL.createObjectURL(input.profilePhoto)
-                      : user?.profilePicture
-                  }
-                  alt="Profile"
-                />
+                <AvatarImage src={user?.profilePicture} alt="Profile" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </div>
@@ -123,7 +104,7 @@ const EditProfile = () => {
             className="hidden"
           />
           <button
-            onClick={() => imgRef.current?.click()}
+            onClick={() => imgRef?.current.click()}
             className="change-photo-btn"
           >
             Change Profile Photo
@@ -172,9 +153,7 @@ const EditProfile = () => {
             Please wait
           </Button>
         ) : (
-          <Button className="change-photo-btn" onClick={editProfileHandler}>
-            Submit
-          </Button>
+          <Button className="change-photo-btn" onClick={editProfileHandler}>Submit</Button>
         )}
       </section>
     </div>
