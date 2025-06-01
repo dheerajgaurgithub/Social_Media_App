@@ -1,44 +1,33 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit"
 
 const authSlice = createSlice({
-  name: "auth",
-  initialState: {
-    user: null,
-    posts: [],
-    selectedPost: null,
-    suggestedUsers: [],
-    userProfile: null,
-    selectedUser:null,
-  },
-  reducers: {
-    setAuthUser: (state, action) => {
-      state.user = action.payload;
+    name:"auth",
+    initialState:{
+        user:null,
+        suggestedUsers:[],
+        userProfile:null,
+        selectedUser:null,
     },
-    setPosts: (state, action) => {
-      state.posts = action.payload;
-    },
-    setSelectedPost: (state, action) => {
-      state.selectedPost = action.payload;
-    },
-    setSuggestedUsers: (state, action) => {
-      state.suggestedUsers = action.payload;
-    },
-    setUserProfile: (state, action) => {
-      state.userProfile = action.payload;
-    },
-    setSelectedUser:(state,action)=>{
-      state.selectedUser=action.payload;
+    reducers:{
+        // actions
+        setAuthUser:(state,action) => {
+            state.user = action.payload;
+        },
+        setSuggestedUsers:(state,action) => {
+            state.suggestedUsers = action.payload;
+        },
+        setUserProfile:(state,action) => {
+            state.userProfile = action.payload;
+        },
+        setSelectedUser:(state,action) => {
+            state.selectedUser = action.payload;
+        }
     }
-  },
 });
-
 export const {
-  setAuthUser,
-  setPosts,
-  setSelectedPost,
-  setSuggestedUsers,
-  setUserProfile,
-  setSelectedUser,
+    setAuthUser, 
+    setSuggestedUsers, 
+    setUserProfile,
+    setSelectedUser,
 } = authSlice.actions;
-
 export default authSlice.reducer;

@@ -1,25 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-const initialState = {
-  posts: [], 
-  selectedPost:null,
-};
-
 const postSlice = createSlice({
-  name: "posts",
-  initialState,
-  reducers: {
-    setPosts: (state, action) => {
-      state.posts = action.payload; 
+    name:'post',
+    initialState:{
+        posts:[],
+        selectedPost:null,
     },
-    addPost: (state, action) => {
-      state.posts.unshift(action.payload);
-    },
-    setSelectedPost:(state,action)=>{
-      state.selectedPost=action.payload;
+    reducers:{
+        //actions
+        setPosts:(state,action) => {
+            state.posts = action.payload;
+        },
+        setSelectedPost:(state,action) => {
+            state.selectedPost = action.payload;
+        }
     }
-  },
 });
-
-export const { setPosts, addPost , setSelectedPost} = postSlice.actions;
+export const {setPosts, setSelectedPost} = postSlice.actions;
 export default postSlice.reducer;
