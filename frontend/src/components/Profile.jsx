@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { Button } from './ui/button';
 import { Heart, MessageCircle } from 'lucide-react';
 import axios from 'axios';
+<<<<<<< HEAD
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 
 const Profile = () => {
@@ -15,10 +16,24 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
 
+=======
+
+const Profile = () => {
+  const { id } = useParams(); // The profile's user ID (the user we're viewing)
+  const [activeTab, setActiveTab] = useState("posts");
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch profile data using custom hook
+>>>>>>> 7860768fc8c2e9b01c13eea70d9c500f1eaf5e8d
   useGetUserProfile(id);
   const { userProfile, user } = useSelector((store) => store.auth);
   const isLoggedInUserProfile = user?._id === id;
 
+<<<<<<< HEAD
+=======
+  // Check if current user (viewer) is following the profile
+>>>>>>> 7860768fc8c2e9b01c13eea70d9c500f1eaf5e8d
   useEffect(() => {
     if (userProfile?.followers && user?._id) {
       setIsFollowing(userProfile.followers.includes(user._id));
@@ -36,7 +51,16 @@ const Profile = () => {
       );
 
       if (res.data.success) {
+<<<<<<< HEAD
         setIsFollowing(res.data.isFollowing);
+=======
+        // Backend returns whether current user is following after update
+        setIsFollowing(res.data.isFollowing);
+
+        // Optional: update userProfile state locally (if you want to reflect new followers count)
+        // Since you're using Redux for userProfile, a refresh might be better to reflect latest state
+
+>>>>>>> 7860768fc8c2e9b01c13eea70d9c500f1eaf5e8d
         alert(`You have ${res.data.isFollowing ? 'followed' : 'unfollowed'} ${userProfile?.username}`);
       } else {
         alert("Could not update follow status.");
@@ -116,6 +140,10 @@ const Profile = () => {
         </div>
       </div>
 
+<<<<<<< HEAD
+=======
+      {/* Tabs */}
+>>>>>>> 7860768fc8c2e9b01c13eea70d9c500f1eaf5e8d
       <div className="flex justify-center mt-4">
         <Button variant={activeTab === "posts" ? "default" : "outline"} onClick={() => handleTabChange("posts")}>
           Posts
@@ -129,6 +157,7 @@ const Profile = () => {
       <div className="grid grid-cols-3 gap-4 p-4">
         {displayedPost?.length > 0 ? (
           displayedPost.map((post) => (
+<<<<<<< HEAD
             <Dialog key={post._id}>
               <DialogTrigger asChild>
                 <div
@@ -163,6 +192,12 @@ const Profile = () => {
                 </div>
               </DialogContent>
             </Dialog>
+=======
+            <div key={post._id} className="bg-gray-100 p-2 rounded">
+              <img src={post.imageUrl} alt={post.caption} className="w-full h-40 object-cover rounded" />
+              <p className="mt-2 text-sm text-gray-700">{post.caption}</p>
+            </div>
+>>>>>>> 7860768fc8c2e9b01c13eea70d9c500f1eaf5e8d
           ))
         ) : (
           <p className="text-center col-span-3 text-gray-500">No posts to display.</p>
