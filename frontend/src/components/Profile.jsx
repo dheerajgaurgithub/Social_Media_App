@@ -136,7 +136,7 @@ const Profile = () => {
         {displayedPost?.length > 0 ? (
           displayedPost.map((post) => (
             <div key={post._id} className="bg-gray-100 p-2 rounded">
-              <img src={post.imageUrl} alt={post.caption} className="w-full h-40 object-cover rounded" />
+              <img src={post.image} alt={post.caption} className="w-full h-40 object-cover rounded" />
               <p className="mt-2 text-sm text-gray-700">{post.caption}</p>
             </div>
           ))
