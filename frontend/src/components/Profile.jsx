@@ -6,19 +6,19 @@ import { useSelector } from 'react-redux';
 import { Button } from './ui/button';
 import { Heart, MessageCircle } from 'lucide-react';
 import axios from 'axios';
+import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 
 const Profile = () => {
-  const { id } = useParams(); // The profile's user ID (the user we're viewing)
+  const { id } = useParams();
   const [activeTab, setActiveTab] = useState("posts");
   const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
 
-  // Fetch profile data using custom hook
   useGetUserProfile(id);
   const { userProfile, user } = useSelector((store) => store.auth);
   const isLoggedInUserProfile = user?._id === id;
 
-  // Check if current user (viewer) is following the profile
   useEffect(() => {
     if (userProfile?.followers && user?._id) {
       setIsFollowing(userProfile.followers.includes(user._id));
@@ -36,12 +36,7 @@ const Profile = () => {
       );
 
       if (res.data.success) {
-        // Backend returns whether current user is following after update
         setIsFollowing(res.data.isFollowing);
-
-        // Optional: update userProfile state locally (if you want to reflect new followers count)
-        // Since you're using Redux for userProfile, a refresh might be better to reflect latest state
-
         alert(`You have ${res.data.isFollowing ? 'followed' : 'unfollowed'} ${userProfile?.username}`);
       } else {
         alert("Could not update follow status.");
@@ -121,7 +116,6 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Tabs */}
       <div className="flex justify-center mt-4">
         <Button variant={activeTab === "posts" ? "default" : "outline"} onClick={() => handleTabChange("posts")}>
           Posts
@@ -135,10 +129,40 @@ const Profile = () => {
       <div className="grid grid-cols-3 gap-4 p-4">
         {displayedPost?.length > 0 ? (
           displayedPost.map((post) => (
-            <div key={post._id} className="bg-gray-100 p-2 rounded">
-              <img src={post.image} alt={post.caption} className="w-full h-40 object-cover rounded" />
-              <p className="mt-2 text-sm text-gray-700">{post.caption}</p>
-            </div>
+            <Dialog key={post._id}>
+              <DialogTrigger asChild>
+                <div
+                  className="relative cursor-pointer group"
+                  onClick={() => setSelectedPost(post)}
+                >
+                  <img
+                    src={post.image}
+                    alt={post.caption}
+                    className="w-full h-40 object-cover rounded"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                    <div className="flex gap-4 text-white text-sm font-medium">
+                      <div className="flex items-center gap-1">
+                        <Heart className="w-4 h-4 text-white" />
+                        <span>{post.likes?.length || 0}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <MessageCircle className="w-4 h-4 text-white" />
+                        <span>{post.comments?.length || 0}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <img src={selectedPost?.image} alt="Post" className="w-full object-cover rounded-lg mb-4" />
+                <p className="text-lg font-semibold mb-2">{selectedPost?.caption}</p>
+                <div className="flex gap-6 text-sm text-gray-600">
+                  <span>❤️ {selectedPost?.likes?.length || 0} likes</span>
+                  <span>💬 {selectedPost?.comments?.length || 0} comments</span>
+                </div>
+              </DialogContent>
+            </Dialog>
           ))
         ) : (
           <p className="text-center col-span-3 text-gray-500">No posts to display.</p>
