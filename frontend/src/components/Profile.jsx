@@ -1,174 +1,234 @@
-import React, { useState, useEffect } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import useGetUserProfile from '@/hooks/useGetUserProfile';
-import { Link, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Button } from './ui/button';
-import { Heart, MessageCircle } from 'lucide-react';
-import axios from 'axios';
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
+import React, { useState } from "react";
+import { Button } from "./ui/button";
+import useGetUserProfile from "@/hooks/useGetUserProfile";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Heart, MessageCircle, Grid, Bookmark, Settings, Archive } from "lucide-react";
+import axios from "axios";
+import { toast, Toaster } from "sonner";
 
 const Profile = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("posts");
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [selectedPost, setSelectedPost] = useState(null);
 
   useGetUserProfile(id);
   const { userProfile, user } = useSelector((store) => store.auth);
-  const isLoggedInUserProfile = user?._id === id;
 
-  useEffect(() => {
-    if (userProfile?.followers && user?._id) {
-      setIsFollowing(userProfile.followers.includes(user._id));
-    }
-  }, [userProfile, user]);
+  const isLoggedInUserProfile = user?._id === id;
+  const [isFollowing, setIsFollowing] = useState(
+    userProfile?.followers?.includes(user?._id)
+  );
+
+  const handleTabChange = (tab) => setActiveTab(tab);
+
+  const displayedPost =
+    activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;
 
   const handleFollowUnfollow = async () => {
-    if (!user) return alert("You must be logged in to follow/unfollow.");
-    setLoading(true);
+    const url = `http://localhost:8000/api/v1/user/followOrUnfollow/${userProfile?._id}`;
     try {
-      const res = await axios.put(
-        `http://localhost:8000/api/v1/user/followOrUnfollow/${id}`,
-        {},
-        { withCredentials: true }
-      );
-
+      const res = await axios.post(url, {}, { withCredentials: true });
       if (res.data.success) {
-        setIsFollowing(res.data.isFollowing);
-        alert(`You have ${res.data.isFollowing ? 'followed' : 'unfollowed'} ${userProfile?.username}`);
-      } else {
-        alert("Could not update follow status.");
+        setIsFollowing((prev) => !prev);
+        toast.success(
+          isFollowing
+            ? "Unfollowed successfully!"
+            : "Followed successfully!"
+        );
       }
-    } catch (err) {
-      console.error(err);
-      alert("An error occurred while updating follow status.");
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Something went wrong!");
     }
   };
 
-  const handleTabChange = (tab) => setActiveTab(tab);
-  const displayedPost = activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;
+  const handleMessageClick = () => {
+    navigate("/chat");
+  };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white min-h-screen">
-      <div className="flex flex-col md:flex-row items-start gap-8 p-6 md:p-12 border-b border-gray-200">
-        <div className="flex-shrink-0">
-          <Avatar className="w-32 h-32 md:w-40 md:h-40 ring-4 ring-gray-100">
-            <AvatarImage src={userProfile?.profilePicture || "/fallback-image.jpg"} alt="profile" className="object-cover" />
-            <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-purple-500 to-blue-500 text-white">
-              {userProfile?.username?.charAt(0).toUpperCase() || 'U'}
-            </AvatarFallback>
-          </Avatar>
-        </div>
+    <>
+      <Toaster position="top-center" />
+      <div className="max-w-4xl mx-auto px-4 py-8 min-h-screen bg-background">
+        {/* Profile Header */}
+        <div className="flex flex-col md:flex-row items-start gap-8 pb-8 border-b border-border">
+          {/* Avatar Section */}
+          <div className="flex-shrink-0 mx-auto md:mx-0">
+            <Avatar className="w-32 h-32 md:w-40 md:h-40 ring-4 ring-accent">
+              <AvatarImage
+                src={userProfile?.profilePicture || "/fallback-image.jpg"}
+                alt="profile"
+                className="object-cover"
+              />
+              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-primary to-accent text-primary-foreground">
+                {userProfile?.username?.charAt(0)?.toUpperCase() || 'U'}
+              </AvatarFallback>
+            </Avatar>
+          </div>
 
-        <div className="flex-1 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <h1 className="text-2xl md:text-3xl font-light text-gray-900">{userProfile?.username}</h1>
-            {isLoggedInUserProfile ? (
-              <div className="flex flex-wrap gap-2">
-                <Link to="/account/edit">
-                  <Button variant="outline" className="h-8 px-4 text-sm font-medium">Edit profile</Button>
-                </Link>
-                <Button variant="outline" className="h-8 px-4 text-sm font-medium">View archive</Button>
-                <Button variant="outline" className="h-8 px-4 text-sm font-medium">Ad tools</Button>
-              </div>
-            ) : (
-              <div className="flex gap-2">
-                <Button
-                  className={`h-8 px-6 text-sm font-medium ${isFollowing ? "bg-gray-200" : "bg-blue-500 text-white hover:bg-blue-600"}`}
-                  onClick={handleFollowUnfollow}
-                  disabled={loading}
-                >
-                  {loading ? "Processing..." : isFollowing ? "Unfollow" : "Follow"}
-                </Button>
-                {isFollowing && (
-                  <Button variant="outline" className="h-8 px-6 text-sm font-medium">
-                    <MessageCircle className="w-4 h-4 mr-1" /> Message
+          {/* Profile Info Section */}
+          <div className="flex-1 space-y-6 text-center md:text-left">
+            {/* Username and Actions */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <h1 className="text-2xl md:text-3xl font-light text-foreground">
+                {userProfile?.username || "username"}
+              </h1>
+              {isLoggedInUserProfile ? (
+                <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+                  <Link to="/account/edit">
+                    <Button variant="outline" size="sm" className="h-8 px-4">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Edit profile
+                    </Button>
+                  </Link>
+                  <Button variant="outline" size="sm" className="h-8 px-4">
+                    <Archive className="w-4 h-4 mr-2" />
+                    View archive
                   </Button>
-                )}
+                  <Button variant="outline" size="sm" className="h-8 px-4">
+                    Ad tools
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex gap-2 justify-center sm:justify-start">
+                  <Button
+                    variant={isFollowing ? "destructive" : "default"}
+                    size="sm"
+                    className="h-8 px-6"
+                    onClick={handleFollowUnfollow}
+                  >
+                    {isFollowing ? "Unfollow" : "Follow"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 px-6"
+                    onClick={handleMessageClick}
+                  >
+                    Message
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            {/* Stats */}
+            <div className="flex gap-8 justify-center md:justify-start text-base">
+              <div className="text-center md:text-left">
+                <span className="font-semibold text-foreground">
+                  {userProfile?.posts?.length || 0}
+                </span>
+                <span className="text-muted-foreground ml-1">posts</span>
               </div>
-            )}
-          </div>
+              <div className="text-center md:text-left">
+                <span className="font-semibold text-foreground">
+                  {userProfile?.followers?.length || 0}
+                </span>
+                <span className="text-muted-foreground ml-1">followers</span>
+              </div>
+              <div className="text-center md:text-left">
+                <span className="font-semibold text-foreground">
+                  {userProfile?.following?.length || 0}
+                </span>
+                <span className="text-muted-foreground ml-1">following</span>
+              </div>
+            </div>
 
-          <div className="flex gap-8 text-base">
-            <div className="text-center sm:text-left">
-              <span className="font-semibold text-gray-900">{userProfile?.posts?.length || 0}</span>
-              <span className="text-gray-600 ml-1">posts</span>
+            {/* Bio */}
+            <div className="space-y-1">
+              <p className="text-foreground leading-relaxed">
+                {userProfile?.bio || "No bio available"}
+              </p>
+              <p className="text-muted-foreground text-sm">
+                @{userProfile?.username}
+              </p>
+              {!isLoggedInUserProfile && (
+                <p className="text-muted-foreground text-sm">
+                  ❤️ @{userProfile?.username}
+                </p>
+              )}
             </div>
-            <div className="text-center sm:text-left">
-              <span className="font-semibold text-gray-900">{userProfile?.followers?.length || 0}</span>
-              <span className="text-gray-600 ml-1">followers</span>
-            </div>
-            <div className="text-center sm:text-left">
-              <span className="font-semibold text-gray-900">{userProfile?.following?.length || 0}</span>
-              <span className="text-gray-600 ml-1">following</span>
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <p className="text-gray-900 leading-relaxed">{userProfile?.bio || "No bio available"}</p>
-            <p className="text-gray-500 text-sm">@{userProfile?.username}</p>
-            {!isLoggedInUserProfile && <p className="text-gray-500 text-sm">❤️ @{userProfile?.username}</p>}
           </div>
         </div>
-      </div>
 
-      <div className="flex justify-center mt-4">
-        <Button variant={activeTab === "posts" ? "default" : "outline"} onClick={() => handleTabChange("posts")}>
-          Posts
-        </Button>
-        <Button variant={activeTab === "bookmarks" ? "default" : "outline"} onClick={() => handleTabChange("bookmarks")}>
-          Bookmarks
-        </Button>
-      </div>
+        {/* Tabs */}
+        <div className="flex border-b border-border bg-background sticky top-0 z-10 mt-8">
+          <button
+            className={`flex-1 py-4 px-1 text-xs font-semibold uppercase tracking-wider transition-colors flex items-center justify-center gap-2 ${
+              activeTab === "posts"
+                ? "border-b-2 border-foreground text-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+            onClick={() => handleTabChange("posts")}
+          >
+            <Grid className="w-3 h-3" />
+            Posts
+          </button>
+          
+          {isLoggedInUserProfile && (
+            <button
+              className={`flex-1 py-4 px-1 text-xs font-semibold uppercase tracking-wider transition-colors flex items-center justify-center gap-2 ${
+                activeTab === "saved"
+                  ? "border-b-2 border-foreground text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              onClick={() => handleTabChange("saved")}
+            >
+              <Bookmark className="w-3 h-3" />
+              Saved
+            </button>
+          )}
+          
+          <button className="flex-1 py-4 px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
+            Reels
+          </button>
+          
+          <button className="flex-1 py-4 px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
+            Tags
+          </button>
+        </div>
 
-      {/* Posts Grid */}
-      <div className="grid grid-cols-3 gap-4 p-4">
-        {displayedPost?.length > 0 ? (
-          displayedPost.map((post) => (
-            <Dialog key={post._id}>
-              <DialogTrigger asChild>
-                <div
-                  className="relative cursor-pointer group"
-                  onClick={() => setSelectedPost(post)}
-                >
-                  <img
-                    src={post.image}
-                    alt={post.caption}
-                    className="w-full h-40 object-cover rounded"
+        {/* Posts Grid */}
+        <div className="mt-6">
+          {displayedPost?.length > 0 ? (
+            <div className="grid grid-cols-3 gap-1 md:gap-4">
+              {displayedPost.map((post) => (
+                <div key={post?._id} className="relative aspect-square group cursor-pointer">
+                  <img 
+                    src={post.image} 
+                    alt="post" 
+                    className="w-full h-full object-cover rounded-lg group-hover:brightness-75 transition-all duration-200" 
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                    <div className="flex gap-4 text-white text-sm font-medium">
-                      <div className="flex items-center gap-1">
-                        <Heart className="w-4 h-4 text-white" />
-                        <span>{post.likes?.length || 0}</span>
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg flex items-center justify-center">
+                    <div className="flex items-center gap-6 text-white">
+                      <div className="flex items-center gap-2">
+                        <Heart className="w-5 h-5 fill-current" />
+                        <span className="font-semibold">{post?.likes?.length || 0}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <MessageCircle className="w-4 h-4 text-white" />
-                        <span>{post.comments?.length || 0}</span>
+                      <div className="flex items-center gap-2">
+                        <MessageCircle className="w-5 h-5 fill-current" />
+                        <span className="font-semibold">{post?.comments?.length || 0}</span>
                       </div>
                     </div>
                   </div>
                 </div>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <img src={selectedPost?.image} alt="Post" className="w-full object-cover rounded-lg mb-4" />
-                <p className="text-lg font-semibold mb-2">{selectedPost?.caption}</p>
-                <div className="flex gap-6 text-sm text-gray-600">
-                  <span>❤️ {selectedPost?.likes?.length || 0} likes</span>
-                  <span>💬 {selectedPost?.comments?.length || 0} comments</span>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className="mb-4">
+                <div className="w-16 h-16 mx-auto bg-muted rounded-full flex items-center justify-center">
+                  <Heart className="w-8 h-8 text-muted-foreground" />
                 </div>
-              </DialogContent>
-            </Dialog>
-          ))
-        ) : (
-          <p className="text-center col-span-3 text-gray-500">No posts to display.</p>
-        )}
+              </div>
+              <h3 className="text-2xl font-light text-foreground mb-2">No Posts Yet</h3>
+              <p className="text-muted-foreground">When you share photos, they'll appear on your profile.</p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
