@@ -83,13 +83,13 @@ const Profile = () => {
                       Edit profile
                     </Button>
                   </Link>
-                  <Button variant="outline" size="sm" className="h-8 px-4">
+                  {/* <Button variant="outline" size="sm" className="h-8 px-4">
                     <Archive className="w-4 h-4 mr-2" />
                     View archive
                   </Button>
                   <Button variant="outline" size="sm" className="h-8 px-4">
                     Ad tools
-                  </Button>
+                  </Button> */}
                 </div>
               ) : (
                 <div className="flex gap-2 justify-center sm:justify-start">
@@ -180,13 +180,13 @@ const Profile = () => {
             </button>
           )}
           
-          <button className="flex-1 py-4 px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
+          {/* <button className="flex-1 py-4 px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
             Reels
           </button>
           
           <button className="flex-1 py-4 px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
             Tags
-          </button>
+          </button> */}
         </div>
 
         {/* Posts Grid */}
