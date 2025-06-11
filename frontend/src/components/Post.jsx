@@ -163,9 +163,6 @@ const Post = ({ post, onDelete }) => {
                                     <Button onClick={handleFollowUnfollow} variant='ghost' className="py-4 text-blue-600 font-semibold border-b border-gray-100 rounded-none hover:bg-blue-50">
                                         {isFollowing ? 'Unfollow' : 'Follow'}
                                     </Button>
-                                    {/* <Button variant='ghost' className="py-4 text-gray-700 border-b border-gray-100 rounded-none hover:bg-gray-50">
-                                        Add to favorites
-                                    </Button> */}
                                 </>
                             )}
                             {user && user._id === post.author._id && (
