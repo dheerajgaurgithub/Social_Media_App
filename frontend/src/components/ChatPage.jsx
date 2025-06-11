@@ -21,7 +21,7 @@ const ChatPage = () => {
         if (!textMessage.trim()) return;
         try {
             const res = await axios.post(
-                `https://social-media-app-u9d1.onrender.com/v1/message/send/${receiverId}`,
+                `https://social-media-app-u9d1.onrender.com/api/v1/message/send/${receiverId}`,
                 { textMessage },
                 {
                     headers: { 'Content-Type': 'application/json' },

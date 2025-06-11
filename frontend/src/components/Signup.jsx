@@ -23,7 +23,7 @@ const Signup = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const res = await axios.post('https://social-media-app-u9d1.onrender.com/v1/user/register', input, {
+            const res = await axios.post('https://social-media-app-u9d1.onrender.com/api/v1/user/register', input, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
