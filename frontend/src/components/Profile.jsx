@@ -27,7 +27,7 @@ const Profile = () => {
     activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;
 
   const handleFollowUnfollow = async () => {
-    const url = `http://localhost:8000/api/v1/user/followOrUnfollow/${userProfile?._id}`;
+    const url = `https://social-media-app-u9d1.onrender.com/v1/user/followOrUnfollow/${userProfile?._id}`;
     try {
       const res = await axios.post(url, {}, { withCredentials: true });
       if (res.data.success) {
