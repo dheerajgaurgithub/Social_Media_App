@@ -26,7 +26,7 @@ const SuggestedUsers = () => {
     const handleFollowToggle = async (userId) => {
         try {
             const res = await axios.post(
-                `https://social-media-app-u9d1.onrender.com/api/v1/user/followOrUnfollow/${userId}`,
+                `http://localhost:8000/api/v1/user/followOrUnfollow/${userId}`,
                 {},
                 { withCredentials: true }
             );

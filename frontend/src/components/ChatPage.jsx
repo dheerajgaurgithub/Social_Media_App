@@ -21,7 +21,7 @@ const ChatPage = () => {
         if (!textMessage.trim()) return;
         try {
             const res = await axios.post(
-                `https://social-media-app-u9d1.onrender.com/api/v1/message/send/${receiverId}`,
+                `http://localhost:8000/api/v1/message/send/${receiverId}`,
                 { textMessage },
                 {
                     headers: { 'Content-Type': 'application/json' },
@@ -67,7 +67,7 @@ const ChatPage = () => {
             border-r border-gray-200/50 
             flex-col
             flex-shrink-0
-        `}
+          `}
                 >
                     <div className="p-6 border-b border-gray-200/50 flex items-center gap-3">
                         <Avatar className="w-12 h-12 ring-2 ring-blue-200">
