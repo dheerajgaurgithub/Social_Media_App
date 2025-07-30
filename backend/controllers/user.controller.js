@@ -116,7 +116,7 @@ export const getProfile = async (req, res) => {
         const userId = req.params.id;
         console.log("Fetching profile for userId:", userId);
 
-        let user = await User.findById(userId).populate({path:'posts',createdAt:-1}).populate('bookmarks');
+        let user = await User.findById(userId).populate({path:'posts',createdAt:-1}).populate('bookmarks').populate('favorites');
 
         if (!user) {
             return res.status(404).json({
@@ -219,3 +219,25 @@ export const followOrUnfollow = async (req, res) => {
         console.log(error);
     }
 }
+export const getCurrentUserProfile = async (req, res) => {
+    try {
+        const userId = req.id;
+        let user = await User.findById(userId).populate({path:'posts',createdAt:-1}).populate('bookmarks');
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+                success: false
+            });
+        }
+        return res.status(200).json({
+            user,
+            success: true
+        });
+    } catch (error) {
+        console.log("Error fetching current user profile:", error);
+        return res.status(500).json({
+            message: "Internal Server Error",
+            success: false
+        });
+    }
+};

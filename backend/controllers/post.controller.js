@@ -311,3 +311,26 @@ export const bookmarkPost = async (res, req) => {
         console.log("error");
     }
 }
+export const favoritePost = async (req, res) => {
+    try {
+        const userId = req.id;
+        const postId = req.params.id;
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: "No post found", success: false });
+        }
+        const isFavorited = post.favorites.includes(userId);
+        if (isFavorited) {
+            await post.updateOne({ $pull: { favorites: userId } });
+            await post.save();
+            return res.status(200).json({ message: "Removed from favorites", success: true });
+        } else {
+            await post.updateOne({ $addToSet: { favorites: userId } });
+            await post.save();
+            return res.status(200).json({ message: "Added to favorites", success: true });
+        }
+    } catch (error) {
+        console.log("Favorite Post Error:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+}
